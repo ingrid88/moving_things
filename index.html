@@ -1,0 +1,66 @@
+<canvas id="c" width="500px" height="500px"></canvas>
+<script>
+var e = document.getElementById('c')
+var g = e.getContext("2d")
+
+var x=10
+var y=10
+g.fillStyle = "hsl(111,60%,60%)"
+g.fillRect(x,y,1000,1000)
+
+
+var SHAPES=["%", "@", "&", "*", "!", "#"]
+var COLORS=[30, 90, 120, 150, 190, 240]
+var THINGS = []
+
+document.getElementById("c").addEventListener("click", function(event){
+  mouse_click_position = getCursorPosition(e, event)
+  x = mouse_click_position[0]
+  y = mouse_click_position[1]
+
+  // create new thing
+  THINGS.push(new Object(x, y))
+  g.fillStyle = "hsl(300,60%,60%)"
+  g.fillRect(x,y,10,10)
+});
+
+function getCursorPosition(canvas, event) {
+    var rect = canvas.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    console.log("x: " + x + " y: " + y);
+    return [x,y]
+}
+
+class Object {
+  constructor(xpos, ypos) {
+    this.height = 10;
+    this.width = 10;
+    this.xpos = xpos
+    this.ypos = ypos
+    this.speed = Math.random()*5
+    this.angle = Math.random()*360*Math.PI/180
+  }
+
+}
+
+
+function move_things(){
+  for(var i=0; i < THINGS.length; i++) {
+    // remove
+    g.fillStyle = "hsl(111,60%,60%)"
+    g.fillRect(THINGS[i].xpos,THINGS[i].ypos,10,10)
+
+    // change position
+    THINGS[i].xpos += THINGS[i].speed * Math.cos(THINGS[i].angle)
+    THINGS[i].ypos += THINGS[i].speed * Math.sin(THINGS[i].angle)
+    console.log(THINGS[i].speed * Math.sin(THINGS[i].angle))
+    // fill
+    g.fillStyle = "hsl(300,60%,60%)"
+    g.fillRect(THINGS[i].xpos,THINGS[i].ypos,10,10)
+    console.log(THINGS[i]);
+  }
+}
+
+setInterval(move_things, 500);
+</script>
